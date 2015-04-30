@@ -1,0 +1,6 @@
+Yavapai and yuma solutions:
+
+Changed dw and include to public properties with gets and sets
+
+Added try catch block, learned from kenny, to add the values of the checkboxes to the query string
+check boxes for ec, yuma, and yavapai should now all be persistent. Pushing to dev now.

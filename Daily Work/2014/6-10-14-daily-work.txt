@@ -1,0 +1,6 @@
+Had a problem where the referred checkbox would only become checked if you hit the filter button.
+This means that the first page wouldn't load Vrushti Bhatt unless you searched THEN hit the filter
+button. I changed the checkboxes id from "'#searchFilterSideBar_cbReferred'" to "'#<%: cbReferred.ClientID %>'".
+
+Research ng-init and ng-repeat to look for a solution to create an angular js version of a foreach loop.
+This is for the campus ddl. I 

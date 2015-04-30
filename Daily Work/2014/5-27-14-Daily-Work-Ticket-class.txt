@@ -1,0 +1,117 @@
+using System;
+using System.Security.Permissions;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace TSC.Models
+{
+    //Fields for regular users
+    public class Ticket
+    {
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 30)]
+        [DataType(DataType.Text)]
+        [Display(Name = "Task title.")]
+        [DisplayName("Title")]
+        [Description("The color used on nodes containing errors.")]
+        [DefaultValue("")]
+        public string Title { get; set; }
+
+        [Required]
+        [StringLength(500, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 30)]
+        [DataType(DataType.Text)]
+        [Display(Name = "Description")]
+        public string Description { get; set; }
+
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "Status")]
+        public string Status { get; set; }
+
+        [Required]
+        [StringLength(30, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 4)]
+        [DataType(DataType.Text)]
+        [Display(Name = "On behalf of")]
+        public string OnBehalfOf { get; set; }
+    }
+
+    //Fields for Technical Support Coordinators ONLY
+    [PrincipalPermission(SecurityAction.Demand, Role = "TSC")]
+    public class TscOnlyProperties : Ticket
+    {
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "Id")]
+        [ReadOnly(true)]
+        public string Id { get; set; }
+
+        [Required]
+        [StringLength(30, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 4)]
+        [DataType(DataType.Text)]
+        [Display(Name = "Requester Name")]
+        public string RequesterName { get; set; }
+
+        [StringLength(10)]
+        [DataType(DataType.Text)]
+        [Display(Name = "Requester Phone")]
+        public string RequesterPhone { get; set; }
+
+        [Required]
+        [StringLength(8)]
+        [DataType(DataType.Text)]
+        [Display(Name = "Requester User Id")]
+        public string RequesterUserId { get; set; }
+
+        [Required]
+        [StringLength(30, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 4)]
+        [DataType(DataType.Text)]
+        [Display(Name = "Creator Name")]
+        [ReadOnly(true)]
+        public string CreatorName { get; set; }
+
+        [StringLength(10)]
+        [DataType(DataType.Text)]
+        [Display(Name = "Creator Phone")]
+        public string CreatorPhone { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 30)]
+        [DataType(DataType.Text)]
+        [Display(Name = "Assignee")]
+        public string Assignee { get; set; }
+
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "Entry Date")]
+        [ReadOnly(true)]
+        public string EntryDate { get; set; }
+
+        [Required]
+        [StringLength(500, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 30)]
+        [DataType(DataType.Text)]
+        [Display(Name = "Work Logs")]
+        public string WorkLogs { get; set; }
+
+        /*
+
+        Title – Short, unique, and descriptive
+	    Description – Detailed clarification of request
+	    Campus – Defaults to user’s campus but selectable
+	    Status – Defaults to Initial Review upon creation and not selectable by users
+	    OnBehalfOf – Defaults to none, but anyone in EC is selectable
+	    Attachments – Documents uploaded from the requester
+	
+	    (TSC ONLY PROPERTIES)
+	  - Id (non-editable display field)
+	    RequesterName (editable display field)
+	    RequesterPhone (editable display field)
+	    RequesterUserId (based only on selected requester name)
+	  - CreatorName (non-editable display field)
+	    CreatorPhone (editable display field)
+	    Assignee (editable, but based on campus initially)
+	  - EntryDate (non-editable display field)
+	  - WorkLogs
+
+        */
+    }
+}

@@ -1,0 +1,32 @@
+﻿@model IEnumerable<TestWebApplication.ViewModels.TicketDateGroup>
+
+@{
+    ViewBag.Title = "Ticket Statistics";
+}
+
+<h2>Ticket Statistics</h2>
+
+<table>
+    <tr>
+        <th>
+            Date Created
+        </th>
+        <th></th>
+        <th>
+            Tickets
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateCreated)
+            </td>
+            <td></td>
+            <td>
+                @item.TicketCount
+            </td>
+        </tr>
+    }
+</table>

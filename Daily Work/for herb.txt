@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<script src="jquery-1.10.2.js"></script>
+<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="select2.js"></script>
+<link href="select2.css" rel="stylesheet" />
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title></title>
+    <style>
+
+        #addTSC {
+            border: 3px solid black;
+        }
+
+        #TSCsThatAppear{
+            border: 3px solid black;
+            padding: 10px;
+            border-top: none;
+        }
+
+        #IndividualTSCDiv:hover {
+            background-color: #E3E3E3;
+            border-radius: 5px;
+        }
+
+        p {
+            font: 14px verdana bold;
+            padding-top: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <br />
+                    <div id="addTSC" align="center">
+                        <br />
+                            <input type="hidden" id="TSCDDL" placeholder="Select or type a name to add a TSC" />
+                        <br />
+                        <br />
+                    </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div align="left" id="TSCsThatAppear">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    //Array of *SELECTED* TSCs
+    var arrayOfTSCSelections = [];
+    //Array of all TSCs available
+    var arrayOfTSCs = [];
+
+    function isInArray(value, array) {
+        return array.indexOf(value) > -1;
+    }
+
+    var TSCs = $('#TSCDDL');
+
+    $(TSCs).select2({
+        data: [
+            { id: 0, text: "Jason Robinson" },
+            { id: 1, text: "Drew Corkill" },
+            { id: 2, text: "Josh Zito" },
+            { id: 3, text: "Jamie Grittner" },
+            { id: 4, text: "Jessie Bruce" }
+        ],
+        width: "325px",
+    });
+
+    function toSelectTwo(inputID) {
+        var campuses = "#" + inputID;
+
+        $(campuses).select2({
+            data: [
+                { id: 0, text: "Flagstaff Mountain" },
+                { id: 1, text: "North Valley" },
+                { id: 2, text: "Yuma" },
+                { id: 3, text: "Sit Amet" },
+                { id: 4, text: "Sed Do" },
+                { id: 5, text: "Tucson" },
+                { id: 6, text: "All Campuses" },
+                { id: 7, text: "Yavapai" },
+                { id: 8, text: "Lorem" },
+                { id: 9, text: "Ipsum" }
+            ],
+            multiple: true,
+            width: "330px",
+            placeholder: "Select or type a campus name"
+        });
+
+    }
+
+    $(TSCs).change(function () {
+        var theID = $(TSCs).select2('data').id;
+        var theSelection = $(TSCs).select2('data').text;
+        //Checks to see if the TSC is already in the Array
+        var bool = isInArray(theSelection, arrayOfTSCSelections);
+
+        //If the TSC isn't in the array, it will return false, allowing this if statement to go through,
+        //which adds the TSC to the div, and to the array fo selected TSCs 
+        if (bool == false) {
+            appendMessage(theSelection, theID);
+            arrayOfTSCSelections[arrayOfTSCSelections.length] = theSelection;
+        }
+    });
+
+    //Parameters pass in the TSC selected and the TSCs ID
+    function appendMessage(selectedText, ID) {
+        //variable used to distinguish each input box
+        var inputID = "campusInput" + ID;
+
+        var Node = document.createElement("p");
+        var Glyphicon = document.createElement("span");
+        Glyphicon.setAttribute("title", "Delete?");
+        Glyphicon.setAttribute("id", arrayOfTSCs.length);
+        Glyphicon.setAttribute("class", "glyphicon glyphicon-remove-circle pull-right");
+        //Calls the deleteTSC function when Glyphicon is clicked
+        Glyphicon.onclick = function () { deleteTSC(this.id) };
+        Node.appendChild(Glyphicon);
+        //Takes the TSC name and appends it to the paragraph tag
+        var NewAppendedChild = document.createTextNode(selectedText);
+        Node.appendChild(NewAppendedChild);
+
+        //Type must be hidden so that it can be turned into a Select2 Multi Value box
+        var oNewInput = document.createElement("input");
+        oNewInput.setAttribute("id", inputID);
+        oNewInput.setAttribute("type", "hidden");
+
+        var TSCDiv = document.createElement("div");
+        TSCDiv.setAttribute("id", "IndividualTSCDiv");
+        TSCDiv.setAttribute("class", arrayOfTSCs.length);
+        //This appends the p tag, which has the TSC name and the correct Glyphicon attached
+        TSCDiv.appendChild(Node);
+        //This appends the Select2 box with the campuses
+        TSCDiv.appendChild(oNewInput);
+        //These functions make the Glyphicon only appear when the TSC is hovered over
+        TSCDiv.onmouseover = function () { $("#" + Glyphicon.id).show(); };
+        TSCDiv.onmouseout = function () { $("#" + Glyphicon.id).hide() }
+        arrayOfTSCs[arrayOfTSCs.length] = TSCDiv;
+        //Appends the entire div with everything in it to the div in the actual HTML
+        document.getElementById("TSCsThatAppear").appendChild(TSCDiv);
+
+        //Turns the inputs into Select2's
+        toSelectTwo(inputID);
+
+        //Makes all Glyphicons appear as hidden
+        $("#" + Glyphicon.id).hide();
+    }
+
+    //This function deletes the TSC from the array with the TSC names and their relative select box as well as removes the correct div
+    //The placeholders are used to keep the arrays from being offnumbered when a TSC is spliced out of the array
+    function deleteTSC(ID) {
+        arrayOfTSCs.splice(ID, 1, "placeholder");
+        arrayOfTSCSelections.splice(ID, 1, "placeholder");
+        $("div").remove("." + ID);
+    }
+    
+</script>

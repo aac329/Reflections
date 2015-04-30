@@ -1,0 +1,206 @@
+Index: Controllers/RequesterController.cs
+===================================================================
+--- Controllers/RequesterController.cs	(revision 30160)
++++ Controllers/RequesterController.cs	(working copy)
+@@ -104,7 +104,21 @@
+             {
+                 tsc_Ticket.Entry_Date = DateTime.Now;
+                 tsc_Ticket.Creator_ID = User.EmplID.ToString();
+-                tsc_Ticket.Creator_Phone = db.vwTsc_PS_Employees.First(u => User.EmplID.ToString() == u.EMPLID).Phone_Cleaned;
++                tsc_Ticket.Creator_Phone = db.vwTsc_PS_Employees.Where(x => x.PHONE_TYPE == "WORK").First(u => User.EmplID.ToString() == u.EMPLID).Phone_Cleaned;
++                if (tsc_Ticket.Creator_Phone == null)
++                {
++                    tsc_Ticket.Creator_Phone =
++                        db.vwTsc_PS_Employees.Where(x => x.PHONE_TYPE == "CELL")
++                            .First(u => User.EmplID.ToString() == u.EMPLID)
++                            .Phone_Cleaned;
++                }
++                if (tsc_Ticket.Creator_Phone == null)
++                {
++                    tsc_Ticket.Creator_Phone =
++                        db.vwTsc_PS_Employees.Where(x => x.PHONE_TYPE == "MAIN")
++                            .First(u => User.EmplID.ToString() == u.EMPLID)
++                            .Phone_Cleaned;
++                }
+                 tsc_Ticket.Status_ID = 1; //Initial Review
+ 
+                 //If the ticket isn't created on behalf of anyone else, the requester is the creator
+@@ -115,8 +129,21 @@
+                 }
+                 else
+                 {
+-                    tsc_Ticket.Requester_Phone =
+-                        db.vwTsc_PS_Employees.First(u => u.EMPLID == tsc_Ticket.Requester_ID).Phone_Cleaned;
++                    tsc_Ticket.Creator_Phone = db.vwTsc_PS_Employees.Where(x => x.PHONE_TYPE == "WORK").First(u => User.EmplID.ToString() == u.EMPLID).Phone_Cleaned;
++                    if (tsc_Ticket.Creator_Phone == null)
++                    {
++                        tsc_Ticket.Creator_Phone =
++                            db.vwTsc_PS_Employees.Where(x => x.PHONE_TYPE == "CELL")
++                                .First(u => User.EmplID.ToString() == u.EMPLID)
++                                .Phone_Cleaned;
++                    }
++                    if (tsc_Ticket.Creator_Phone == null)
++                    {
++                        tsc_Ticket.Creator_Phone =
++                            db.vwTsc_PS_Employees.Where(x => x.PHONE_TYPE == "MAIN")
++                                .First(u => User.EmplID.ToString() == u.EMPLID)
++                                .Phone_Cleaned;
++                    }
+                 }
+                 db.Tsc_Ticket.Add(tsc_Ticket);
+                 db.SaveChanges();
+Index: Controllers/TscController.cs
+===================================================================
+--- Controllers/TscController.cs	(revision 30160)
++++ Controllers/TscController.cs	(working copy)
+@@ -304,7 +304,21 @@
+             {
+                 tsc_Ticket.Entry_Date = DateTime.Now;
+                 tsc_Ticket.Creator_ID = User.EmplID.ToString();
+-                tsc_Ticket.Creator_Phone = db.vwTsc_PS_Employees.First(u => User.EmplID.ToString() == u.EMPLID).Phone_Cleaned;
++                tsc_Ticket.Creator_Phone = db.vwTsc_PS_Employees.Where(x => x.PHONE_TYPE == "WORK").First(u => User.EmplID.ToString() == u.EMPLID).Phone_Cleaned;
++                if (tsc_Ticket.Creator_Phone == null)
++                {
++                    tsc_Ticket.Creator_Phone =
++                        db.vwTsc_PS_Employees.Where(x => x.PHONE_TYPE == "CELL")
++                            .First(u => User.EmplID.ToString() == u.EMPLID)
++                            .Phone_Cleaned;
++                }
++                if (tsc_Ticket.Creator_Phone == null)
++                {
++                    tsc_Ticket.Creator_Phone =
++                        db.vwTsc_PS_Employees.Where(x => x.PHONE_TYPE == "MAIN")
++                            .First(u => User.EmplID.ToString() == u.EMPLID)
++                            .Phone_Cleaned;
++                }
+                 tsc_Ticket.Status_ID = 1; //Initial Review
+ 
+                 //If the ticket isn't created on behalf of anyone else, the requester is the creator
+@@ -315,8 +329,21 @@
+                 }
+                 else
+                 {
+-                    tsc_Ticket.Requester_Phone =
+-                        db.vwTsc_PS_Employees.First(u => u.EMPLID == tsc_Ticket.Requester_ID).Phone_Cleaned;
++                    tsc_Ticket.Creator_Phone = db.vwTsc_PS_Employees.Where(x => x.PHONE_TYPE == "WORK").First(u => User.EmplID.ToString() == u.EMPLID).Phone_Cleaned;
++                    if (tsc_Ticket.Creator_Phone == null)
++                    {
++                        tsc_Ticket.Creator_Phone =
++                            db.vwTsc_PS_Employees.Where(x => x.PHONE_TYPE == "CELL")
++                                .First(u => User.EmplID.ToString() == u.EMPLID)
++                                .Phone_Cleaned;
++                    }
++                    if (tsc_Ticket.Creator_Phone == null)
++                    {
++                        tsc_Ticket.Creator_Phone =
++                            db.vwTsc_PS_Employees.Where(x => x.PHONE_TYPE == "MAIN")
++                                .First(u => User.EmplID.ToString() == u.EMPLID)
++                                .Phone_Cleaned;
++                    }
+                 }
+                 db.Tsc_Ticket.Add(tsc_Ticket);
+                 db.SaveChanges();
+Index: Models/TscModel.edmx
+===================================================================
+--- Models/TscModel.edmx	(revision 30160)
++++ Models/TscModel.edmx	(working copy)
+@@ -75,16 +75,6 @@
+           <Property Name="Work" Type="varchar(max)" Nullable="false" />
+         </EntityType>
+         <!--Errors Found During Generation:
+-warning 6002: The table/view 'TSC.dbo.vwTsc_Campuses' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+-        <EntityType Name="vwTsc_Campuses">
+-          <Key>
+-            <PropertyRef Name="Campus_Code" />
+-            <PropertyRef Name="Campus_Descr" />
+-          </Key>
+-          <Property Name="Campus_Code" Type="varchar" MaxLength="5" Nullable="false" />
+-          <Property Name="Campus_Descr" Type="varchar" MaxLength="100" Nullable="false" />
+-        </EntityType>
+-        <!--Errors Found During Generation:
+ warning 6002: The table/view 'TSC.dbo.vwTsc_PS_Employees' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+         <EntityType Name="vwTsc_PS_Employees">
+           <Key>
+@@ -91,6 +81,7 @@
+             <PropertyRef Name="EMPLID" />
+             <PropertyRef Name="N__User_ID" />
+             <PropertyRef Name="NAME" />
++            <PropertyRef Name="PHONE_TYPE" />
+             <PropertyRef Name="EMAIL_ADDR" />
+           </Key>
+           <Property Name="EMPLID" Type="varchar" MaxLength="11" Nullable="false" />
+@@ -97,6 +88,7 @@
+           <Property Name="N__User_ID" Type="varchar" MaxLength="20" Nullable="false" />
+           <Property Name="NAME" Type="varchar" MaxLength="50" Nullable="false" />
+           <Property Name="Phone_Cleaned" Type="varchar" MaxLength="24" />
++          <Property Name="PHONE_TYPE" Type="varchar" MaxLength="4" Nullable="false" />
+           <Property Name="EMAIL_ADDR" Type="varchar" MaxLength="70" Nullable="false" />
+         </EntityType>
+         <Association Name="FK__Tsc_Ticke__Ticke__2E0ED390">
+@@ -155,12 +147,6 @@
+           <EntitySet Name="Tsc_Ticket_Attachment" EntityType="Self.Tsc_Ticket_Attachment" Schema="dbo" store:Type="Tables" />
+           <EntitySet Name="Tsc_Tsc" EntityType="Self.Tsc_Tsc" Schema="dbo" store:Type="Tables" />
+           <EntitySet Name="Tsc_Work_Log" EntityType="Self.Tsc_Work_Log" Schema="dbo" store:Type="Tables" />
+-          <EntitySet Name="vwTsc_Campuses" EntityType="Self.vwTsc_Campuses" store:Type="Views" store:Schema="dbo">
+-            <DefiningQuery>SELECT 
+-    [vwTsc_Campuses].[Campus_Code] AS [Campus_Code], 
+-    [vwTsc_Campuses].[Campus_Descr] AS [Campus_Descr]
+-    FROM [dbo].[vwTsc_Campuses] AS [vwTsc_Campuses]</DefiningQuery>
+-          </EntitySet>
+           <EntitySet Name="vwTsc_PS_Employees" EntityType="Self.vwTsc_PS_Employees" store:Type="Views" store:Schema="dbo">
+             <DefiningQuery>SELECT 
+     [vwTsc_PS_Employees].[EMPLID] AS [EMPLID], 
+@@ -167,6 +153,7 @@
+     [vwTsc_PS_Employees].[N__User_ID] AS [N__User_ID], 
+     [vwTsc_PS_Employees].[NAME] AS [NAME], 
+     [vwTsc_PS_Employees].[Phone_Cleaned] AS [Phone_Cleaned], 
++    [vwTsc_PS_Employees].[PHONE_TYPE] AS [PHONE_TYPE], 
+     [vwTsc_PS_Employees].[EMAIL_ADDR] AS [EMAIL_ADDR]
+     FROM [dbo].[vwTsc_PS_Employees] AS [vwTsc_PS_Employees]</DefiningQuery>
+           </EntitySet>
+@@ -348,6 +335,7 @@
+             <PropertyRef Name="N__User_ID" />
+             <PropertyRef Name="NAME" />
+             <PropertyRef Name="EMAIL_ADDR" />
++            <PropertyRef Name="PHONE_TYPE" />
+           </Key>
+           <Property Name="EMPLID" Type="String" Nullable="false" MaxLength="11" FixedLength="false" Unicode="false" />
+           <Property Name="N__User_ID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+@@ -354,6 +342,7 @@
+           <Property Name="NAME" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+           <Property Name="Phone_Cleaned" Type="String" MaxLength="24" FixedLength="false" Unicode="false" />
+           <Property Name="EMAIL_ADDR" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
++          <Property Name="PHONE_TYPE" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="false" />
+         </EntityType>
+         <EntityType Name="Tsc_Tsc">
+           <Key>
+@@ -436,17 +425,10 @@
+               </MappingFragment>
+             </EntityTypeMapping>
+           </EntitySetMapping>
+-          <EntitySetMapping Name="vwTsc_Campuses">
+-            <EntityTypeMapping TypeName="TSCModel.vwTsc_Campuses">
+-              <MappingFragment StoreEntitySet="vwTsc_Campuses">
+-                <ScalarProperty Name="Campus_Descr" ColumnName="Campus_Descr" />
+-                <ScalarProperty Name="Campus_Code" ColumnName="Campus_Code" />
+-              </MappingFragment>
+-            </EntityTypeMapping>
+-          </EntitySetMapping>
+           <EntitySetMapping Name="vwTsc_PS_Employees">
+             <EntityTypeMapping TypeName="TSCModel.vwTsc_PS_Employees">
+               <MappingFragment StoreEntitySet="vwTsc_PS_Employees">
++                <ScalarProperty Name="PHONE_TYPE" ColumnName="PHONE_TYPE" />
+                 <ScalarProperty Name="EMAIL_ADDR" ColumnName="EMAIL_ADDR" />
+                 <ScalarProperty Name="Phone_Cleaned" ColumnName="Phone_Cleaned" />
+                 <ScalarProperty Name="NAME" ColumnName="NAME" />
+Index: Models/vwTsc_PS_Employees.cs
+===================================================================
+--- Models/vwTsc_PS_Employees.cs	(revision 30160)
++++ Models/vwTsc_PS_Employees.cs	(working copy)
+@@ -19,5 +19,6 @@
+         public string NAME { get; set; }
+         public string Phone_Cleaned { get; set; }
+         public string EMAIL_ADDR { get; set; }
++        public string PHONE_TYPE { get; set; }
+     }
+ }

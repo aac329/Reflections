@@ -1,0 +1,28 @@
+        [QueryStringParameter("dwString")]
+        public string dw {
+            get
+            {
+                if (dw == null) return null;
+                return DaysOfWeek.FromInteger((int)dw);
+            }
+            set { dw = value; }}
+
+        [QueryStringParameter("includeString")]
+        public string include {
+            get
+            {
+               if (include == null) return null;
+               return IncludeOptions.ToInteger();
+            }
+            set { include = value; }}
+
+
+
+        public int Number { get; set; }
+
+        public QueryStringParameter(int number)
+        {
+            Number = number;
+        }
+
+

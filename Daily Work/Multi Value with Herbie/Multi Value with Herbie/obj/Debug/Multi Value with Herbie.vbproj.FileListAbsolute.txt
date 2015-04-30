@@ -1,0 +1,3 @@
+C:\Users\aac329\Desktop\Daily Work\Multi Value with Herbie\Multi Value with Herbie\bin\Debug\Multi Value with Herbie.exe.config
+C:\Users\aac329\Desktop\Daily Work\Multi Value with Herbie\Multi Value with Herbie\obj\Debug\Multi_Value_with_Herbie.Resources.resources
+C:\Users\aac329\Desktop\Daily Work\Multi Value with Herbie\Multi Value with Herbie\obj\Debug\Multi Value with Herbie.vbproj.GenerateResource.Cache

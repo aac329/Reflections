@@ -1,0 +1,782 @@
+Index: Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Controllers/RequesterController.cs
+===================================================================
+--- Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Controllers/RequesterController.cs	(revision 30021)
++++ Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Controllers/RequesterController.cs	(working copy)
+@@ -17,11 +17,11 @@
+ using PagedList;
+ 
+ namespace Apps.Areas.TSC.Controllers
+-{
++{    
+     public class RequesterController : BaseController
+     {
+         private TscDbEntities db = new TscDbEntities();
+-
++        
+         //[RequesterFilter]
+         // GET: TSC/Requester
+         public ActionResult Index()
+@@ -35,7 +35,7 @@
+                 {
+                     return RedirectToAction("Index", "Tsc");
+                 }
+-
++                
+                 if (currentTsc.Status == "A")
+                 {
+                     if (currentTsc.Manager == "Y")
+@@ -99,7 +99,7 @@
+         {
+             // This logic will probably need to be changed when the create interface is built (in another task)
+             // The name on the front end for the create ticket boxes are prefixed with "Ticket." causing them to bind incorrectly
+-
++            
+             if (ModelState.IsValid)
+             {
+                 tsc_Ticket.Entry_Date = DateTime.Now;
+@@ -135,8 +135,8 @@
+                 }
+                 SendEmailOnTicketCreation(tsc_Ticket);
+             }
+-                return RedirectToAction("Index");
+-            }
++            return RedirectToAction("Index");
++        }
+ 
+         public ActionResult EmailIssue(FormCollection formData)
+         {
+@@ -145,7 +145,7 @@
+                 var issueTitle = formData.Get("Title");
+                 var descr = formData.Get("Description");
+                 var url = formData.Get("url");
+-        
++
+                 if (String.IsNullOrWhiteSpace(issueTitle)) return RedirectToAction("Index");
+                 if (String.IsNullOrWhiteSpace(descr)) return RedirectToAction("Index");
+ 
+@@ -397,14 +397,14 @@
+             {
+                 var client = new SmtpClient("mailgate.nau.edu");
+                 client.Send(message);
+-        }
++            }
+             catch (Exception ex)
+             {
+                 // Avoid page error when mail fails to send, these are just notification emails anyway
++            }
++            
+         }
+ 
+-        }
+-
+         public void SendEmailOnTicketCancelOrReopen(Tsc_Ticket tscTicket, string cancelOrReopen)
+         {
+             var currentUser = new AdminPageManager().GetAdminUser(User.Identity.Name);
+@@ -464,20 +464,20 @@
+             {
+                 var client = new SmtpClient("mailgate.nau.edu");
+                 client.Send(message);
+-        }
++            }
+             catch (Exception ex)
+             {
+                 // Avoid page error when mail fails to send, these are just notification emails anyway
++            }
+         }
+-        }
+ 
+         public void SendEmailOnTicketEdit(string[] previousTicket, string[] presentTicket)
+         {
+             var currentUser = new AdminPageManager().GetAdminUser(User.Identity.Name);
+ 
+-                var previousCampusCode = previousTicket[5];
+-                var presentCampusCode = presentTicket[5];
+-                MailMessage message = new MailMessage();
++            var previousCampusCode = previousTicket[5];
++            var presentCampusCode = presentTicket[5];
++            MailMessage message = new MailMessage();
+ 
+             if (currentUser.Tier == AdminUser.ServerTier.Prod)
+             {
+@@ -528,12 +528,12 @@
+             {
+                 var client = new SmtpClient("mailgate.nau.edu");
+                 client.Send(message);
+-        }
++            }
+             catch (Exception ex)
+             {
+                 // Avoid page error when mail fails to send, these are just notification emails anyway
++            }
+         }
+-        }
+ 
+         [NonAction]
+         private DateTime GetNextDayOfWeek(DateTime start, DayOfWeek day)
+@@ -555,7 +555,7 @@
+                                     <td align=""right"" style=""padding:4px 8px 4px 0;color:#A1B6CB;font-size:10pt;"">User supplied feedback</td>
+                                 </tr>
+                                 <tr>
+-        
++                                    
+                                     User: {0}<br>
+                                     Name: {1}<br>
+                                     Title: {2}<br>
+@@ -567,7 +567,7 @@
+                             </table>
+                         </body>
+                     </html>";
+-    }
++        }
+ 
+         [NonAction]
+         private string EmailBodyForTicketCreation(Tsc_Ticket tscTicket)
+@@ -719,5 +719,5 @@
+                         </body>
+                     </html>";
+         }
++    }
+ }
+-}
+Index: Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Models/Metadata.cs
+===================================================================
+--- Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Models/Metadata.cs	(revision 30021)
++++ Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Models/Metadata.cs	(working copy)
+@@ -38,10 +38,8 @@
+     #region Metadata Declarations
+ 
+     internal sealed class Tsc_Ticket_Metadata
+-    {
++    {        
+         private const int TitleLength = 100;                
+-        private const string tex = "test";
+-        [Display(Name = tex)]
+         [StringLength(TitleLength)]
+         public string Title { get; set; }
+ 
+Index: Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Views/Requester/_RequesterTicketList.cshtml
+===================================================================
+--- Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Views/Requester/_RequesterTicketList.cshtml	(revision 30021)
++++ Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Views/Requester/_RequesterTicketList.cshtml	(working copy)
+@@ -7,61 +7,61 @@
+ {
+     <div class="row ticket-box-outline">
+         <div id="accordion">
+-                <div id="@ticket.Ticket_ID" class="row" data-toggle="collapse" data-parent="#accordion" onclick="ddlToggle(this)">
+-                    <!-- Left side -->
+-                    <form name="editableForm"></form>
+-                    <div class="col-xs-9 horizontal-line leftSide">
+-                            <div class="form-group-sm" style="padding-left: 15px;">
+-                                <small style="font-weight:bold;">@ticket.Entry_Date.ToString("MM/dd/yyyy hh:mm tt")</small>
+-                                <!-- What you have to click for Modal to open -->
+-                                <a data-toggle="modal" data-target="#attachmentModal_@ticket.Ticket_ID"  id="attachModal">
+-                                    <span class="stopDropDown">
+-                                        <span class="glyphicon glyphicon-paperclip" data-ticket_id="@ticket.Ticket_ID" onclick="openAttModal(this)"></span>
++            <div id="@ticket.Ticket_ID" class="row" data-toggle="collapse" data-parent="#accordion" onclick=" ddlToggle(this) ">
++                <!-- Left side -->
++                <form name="editableForm"></form>
++                <div class="col-xs-9 horizontal-line leftSide">
++                    <div class="form-group-sm" style="padding-left: 15px;">
++                        <small style="font-weight: bold;">@ticket.Entry_Date.ToString("MM/dd/yyyy hh:mm tt")</small>
++                        <!-- What you have to click for Modal to open -->
++                        <a data-toggle="modal" data-target="#attachmentModal_@ticket.Ticket_ID" id="attachModal">
++                            <span class="stopDropDown">
++                                        <span class="glyphicon glyphicon-paperclip" data-ticket_id="@ticket.Ticket_ID" onclick=" openAttModal(this) "></span>
+                                     </span>
+-                                </a>
+-                                <div class="pull-right">
+-                                        <small class="campusName"><b id="campus_name_@ticket.Ticket_ID">@Model.Campuses.First(c => c.Campus_Code == ticket.Campus_Code).Campus_Descr</b></small>
+-                                </div>
+-                            </div>
+-                            <!-- Beginning of ticket editing capabilities. First line, on click toggle edit mode, and use ticket.title token -->
+-                            <div class="form-group-sm" id="titleForm" style="padding-left: 15px;">
+-                                <span style="font-weight:bold; font-size: 22px; color: #333333;" class=" stopDropDown title1 cte-text" data-ticketid="@ticket.Ticket_ID" data-to-update="Title" data-target-width="285px" data-btn-size="btn-sm" id="ticketTitle_@ticket.Ticket_ID">@ticket.Title</span>
+-                                <p class="stopDropDown cte-text-area" data-target-width="600px" data-ticketid="@ticket.Ticket_ID" data-to-update="Description" id="ticketDescription_@ticket.Ticket_ID" style="font-size: 14px; color: #333333; ">
+-                                    @ticket.Description
+-                                </p>
+-                            </div>
+-                        <!-- End of left side -->
++                        </a>
++                        <div class="pull-right">
++                            <small class="campusName"><b id="campus_name_@ticket.Ticket_ID">@Model.Campuses.First(c => c.Campus_Code == ticket.Campus_Code).Campus_Descr</b></small>
++                        </div>
+                     </div>
+-                    <!--  Right side -->
+-                    <div class="col-xs-3 contactinfo">
+-                        <div class="form-group" style="padding-left: 15px; padding-top: 12px">
+-                            <div id="status_@ticket.Ticket_ID" style="font-size: 20px;"  >
+-                                @switch (ticket.Status_ID)
+-                                {
++                    <!-- Beginning of ticket editing capabilities. First line, on click toggle edit mode, and use ticket.title token -->
++                    <div class="form-group-sm" id="titleForm" style="padding-left: 15px;">
++                        <span style="font-weight: bold; font-size: 22px; color: #333333;" class=" stopDropDown title1 cte-text" data-ticketid="@ticket.Ticket_ID" data-to-update="Title" data-target-width="285px" data-btn-size="btn-sm" id="ticketTitle_@ticket.Ticket_ID">@ticket.Title</span>
++                        <p class="stopDropDown cte-text-area" data-target-width="600px" data-ticketid="@ticket.Ticket_ID" data-to-update="Description" id="ticketDescription_@ticket.Ticket_ID" style="font-size: 14px; color: #333333;">
++                            @ticket.Description
++                        </p>
++                    </div>
++                    <!-- End of left side -->
++                </div>
++                <!-- Right side -->
++                <div class="col-xs-3 contactinfo">
++                    <div class="form-group" style="padding-left: 15px; padding-top: 12px">
++                        <div id="status_@ticket.Ticket_ID" style="font-size: 20px;">
++                            @switch (ticket.Status_ID)
++                            {
+                                 case 1:
+                                     <span class="glyphicon glyphicon-list-alt"></span>
+-                                        break;
++                                    break;
+                                 case 2:
+                                     <span class="glyphicon glyphicon-play"></span>
+-                                        break;
++                                    break;
+                                 case 3:
+                                     <span class="glyphicon glyphicon-time"></span>
+-                                        break;
++                                    break;
+                                 case 4:
+                                     <span class="glyphicon glyphicon-play"></span>
+-                                        break;
++                                    break;
+                                 case 5:
+                                     <span class="glyphicon glyphicon-remove"></span>
+-                                        break;
++                                    break;
+                                 case 6:
+                                     <span class="glyphicon glyphicon-ok"></span>
+-                                        break;
+-                                }
+-                                <span id="status_descr_@ticket.Ticket_ID">@ticket.Tsc_Status_LK.Status</span>
+-                            </div>
++                                    break;
++                            }
++                            <span id="status_descr_@ticket.Ticket_ID">@ticket.Tsc_Status_LK.Status</span>
++                        </div>
+ 
+-                            <div class="form-group-sm stopDropDown" style="padding-top: 10px">
+-                                <span class="cte-text" data-to-update="Phone" data-ticketid="@ticket.Ticket_ID" data-target-width="150px" data-btn-size="btn-sm" style="font-size: 16px;" id="updated_date_@ticket.Ticket_ID">
++                        <div class="form-group-sm stopDropDown" style="padding-top: 10px">
++                            <span class="cte-text" data-to-update="Phone" data-ticketid="@ticket.Ticket_ID" data-target-width="150px" data-btn-size="btn-sm" style="font-size: 16px;" id="updated_date_@ticket.Ticket_ID">
+                                     Last Activity:
+                                     @{
+                                         var tscWorkLog = ticket.Tsc_Work_Log.OrderBy(d => d.Date_Worked).FirstOrDefault();
+@@ -75,70 +75,70 @@
+                                         @ticket.Entry_Date.ToShortDateString()
+                                     }
+                                 </span>
+-                                <span class="stopDropDown pull-right" style="vertical-align: bottom; margin: 10px 8px 0 5px">
++                            <span class="stopDropDown pull-right" style="vertical-align: bottom; margin: 10px 8px 0 5px">
+                                     @switch (ticket.Status_ID)
+                                     {
+                                         case 5:
+-                                            {
+-                                                @Html.Raw("<a style='position:relative;' onclick='confirmReopenTicket(" + ticket.Ticket_ID + ")'><span id='spinnerHolder_" + ticket.Ticket_ID + "'></span>(Re-open)</a>")
+-                                                break;
+-                                            }
++                                        {
++                                            @Html.Raw("<a style='position:relative;' onclick='confirmReopenTicket(" + ticket.Ticket_ID + ")'><span id='spinnerHolder_" + ticket.Ticket_ID + "'></span>(Re-open)</a>")
++                                            break;
++                                        }
+                                         case 6:
+-                                            {
+-                                                // show nothing requester can't reopen these tickets
+-                                                break;
+-                                            }
++                                        {
++                                            // show nothing requester can't reopen these tickets
++                                            break;
++                                        }
+ 
+                                         default:
+-                                            {
++                                        {
+                                             @Html.Raw("<a style='position:relative;' onclick='confirmCancelTicket(" + ticket.Ticket_ID + ")'><span id='spinnerHolder_" + ticket.Ticket_ID + "'></span>(Cancel)</a>")
+                                             ;
+-                                                                                                                                                                                                                             break;
+-                                            }
++                                            break;
++                                        }
+                                     }
+                                 </span>
+-                            </div>
+                         </div>
+-                        <!--  End of right side -->
+                     </div>
++                    <!-- End of right side -->
+                 </div>
+-                <div id="collapseAccord_@ticket.Ticket_ID" class="accordion-body collapse">
+-                    <div class="accordion-inner">
+-                        <div id="ticket-attachments_@ticket.Ticket_ID" class="attachments"></div>
+-                        @if (ticket.Status_ID == 5 || ticket.Status_ID == 6)
+-                        {
+-                            @Html.Partial("_DisplayTicket", new EditViewModel(ticket))
+-                        }
+-                        else
+-                        {
+-                            @Html.Partial("_Edit", new EditViewModel(ticket))
++            </div>
++            <div id="collapseAccord_@ticket.Ticket_ID" class="accordion-body collapse">
++                <div class="accordion-inner">
++                    <div id="ticket-attachments_@ticket.Ticket_ID" class="attachments"></div>
++                    @if (ticket.Status_ID == 5 || ticket.Status_ID == 6)
++                    {
++                        @Html.Partial("_DisplayTicket", new EditViewModel(ticket))
++                    }
++                    else
++                    {
++                        @Html.Partial("_Edit", new EditViewModel(ticket))
+ 
+-                        }
+-                        
++                    }
++
+                     <table class="table table-striped table-condensed table-bordered" style="table-layout: fixed; word-wrap: break-word;">
+-                            @foreach (var workLogEntry in ticket.Tsc_Work_Log)
+-                            {
+-                                <tr>
++                        @foreach (var workLogEntry in ticket.Tsc_Work_Log)
++                        {
++                            <tr>
+                                 <td style="width: 10%">@workLogEntry.Date_Worked.ToString("MM/dd/yyyy")</td>
+                                 <td style="width: 70%">@workLogEntry.Work</td>
+                                 <td style="width: 20%">
+-                                        @if (Model.Employees.Any(u => u.EMPLID == workLogEntry.Assignee_ID))
+-                                        {
+-                                            @Model.Employees.First(u => u.EMPLID == workLogEntry.Assignee_ID).NAME
+-                                        }
+-                                        else
+-                                        {
+-                                            @workLogEntry.Assignee_ID
+-                                        }
+-                                    </td>
+-                                </tr>
+-                            }
+-                        </table>
+-                    </div>
++                                    @if (Model.Employees.Any(u => u.EMPLID == workLogEntry.Assignee_ID))
++                                    {
++                                        @Model.Employees.First(u => u.EMPLID == workLogEntry.Assignee_ID).NAME
++                                    }
++                                    else
++                                    {
++                                        @workLogEntry.Assignee_ID
++                                    }
++                                </td>
++                            </tr>
++                        }
++                    </table>
+                 </div>
+-                <!-- End of What you have to click for table to collapse -->
+             </div>
++            <!-- End of What you have to click for table to collapse -->
+         </div>
++    </div>
+         <!-- End of MEGA Button -->
+     <div class="modal fade attachmentModal" id="attachmentModal_@ticket.Ticket_ID">
+         <div class="modal-dialog" id="dropzone_@ticket.Ticket_ID">
+Index: Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Views/Requester/Index.cshtml
+===================================================================
+--- Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Views/Requester/Index.cshtml	(revision 30021)
++++ Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Views/Requester/Index.cshtml	(working copy)
+@@ -7,8 +7,8 @@
+ }
+ @section Styles
+ {
+-<link href="~/Areas/TSC/CSS/TscStyles.css" rel="stylesheet" />
+-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
++    <link href="~/Areas/TSC/CSS/TscStyles.css" rel="stylesheet" />
++    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+     @Styles.Render("~/bundles/select2css")
+ }
+ @section ScriptsBottom
+@@ -21,33 +21,33 @@
+ }
+ 
+ <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+-<div class="hidden">
++<div class="hidden">    
+     @Html.DropDownList("numbers", new SelectList(Model.AdminUsers, "EMPLID", "Phone_Cleaned"))
+     <div id="antiForgeryToken">@Html.AntiForgeryTokenForAjaxPost()</div>
+ </div>
+ <div class="container">
+             <div class="h2">Technical Support</div>
+-            <p>
+-                <a href="@Url.Action("TicketHistory")" class="btn btn-default">
+-                    <span class="glyphicon glyphicon-time"></span> View Support History
+-                </a>
+-            </p>
++    <p>
++        <a href="@Url.Action("TicketHistory")" class="btn btn-default">
++            <span class="glyphicon glyphicon-time"></span> View Support History
++        </a>
++    </p>
+     @if (ViewBag.Tsc > 0)
+     {
+-    <div class="row">
+-        <!--For Mobile Users-->
+-        <nav class="navbar navbar-default" id="mobileNav" style="border-left-style: none; border-right-style: none; border-top-style: none;">
+-            <div class="container-fluid">
+-                <div class="navbar-header">
+-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mobile-navbar-collapse">
+-                        <span class="sr-only">Toggle Navigation</span>
+-                        <span class="icon-bar"></span>
+-                        <span class="icon-bar"></span>
+-                        <span class="icon-bar"></span>
+-                    </button>
+-                </div>
+-                <div class="collapse navbar-collapse" id="mobile-navbar-collapse">
+-                    <ul class="nav navbar-nav" id="mobileNav">
++        <div class="row">
++            <!--For Mobile Users-->
++            <nav class="navbar navbar-default" id="mobileNav" style="border-left-style: none; border-right-style: none; border-top-style: none;">
++                <div class="container-fluid">
++                    <div class="navbar-header">
++                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mobile-navbar-collapse">
++                            <span class="sr-only">Toggle Navigation</span>
++                            <span class="icon-bar"></span>
++                            <span class="icon-bar"></span>
++                            <span class="icon-bar"></span>
++                        </button>
++                    </div>
++                    <div class="collapse navbar-collapse" id="mobile-navbar-collapse">
++                        <ul class="nav navbar-nav" id="mobileNav">
+                             <li role="presentation" class="active"><a href="@Url.Action("Index", "Requester")" role="tab">Requester</a></li>
+                             <li role="presentation"><a href="@Url.Action("Index", "Tsc")" role="tab">Manage Tickets</a></li>
+                             @if (ViewBag.Tsc == 2)
+@@ -58,39 +58,39 @@
+                             <li role="presentation"><a href="@Url.Action("WeeklyReport", "Manager", new { tscIds = @ViewBag.YouEmplid, startDate=@ViewBag.ReportStart, endDate=@ViewBag.ReportEnd })" id="btnGoTo515Report" role="tab">515 Report</a></li>
+                         </ul>
+                     </div>
+-            </div>
+-        </nav>
+-    </div>
++                </div>
++            </nav>
++        </div>
+     }
+-@if (Model.OpenTickets.Tickets.Any())
+-{
+-    <div class=" form-group row">
+-        <p>Click any ticket to view details</p>
+-        <p>
+-            <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#createTicketModal"><span class="glyphicon glyphicon-plus"></span> New Ticket</button>
+-        </p>
+-    </div>
+-    @Html.Partial("_RequesterTicketList", Model.OpenTickets)
+-}
+-else
+-{
+-    <p>Use this form to create a ticket requesting technical support</p>
+-    <div id="full-page-new-ticket">
+-        @using (Html.BeginForm())
+-        {
+-        @Html.AntiForgeryToken()
+-        @Html.Partial("_SubmitTicket", new NewTicketViewModel())
+-        <div class="modal-footer">
+-            <input id="create_ticket_submit" type="submit" value="Create Ticket" formaction='@Url.Action("Create")' class="btn btn-default" />
+-            <input id="report_issue_submit" type="submit" value="Report Issue" formaction='@Url.Action("EmailIssue")' class="btn btn-default" />
++    @if (Model.OpenTickets.Tickets.Any())
++    {
++        <div class=" form-group row">
++            <p>Click any ticket to view details</p>
++            <p>
++                <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#createTicketModal"><span class="glyphicon glyphicon-plus"></span> New Ticket</button>
++            </p>
+         </div>
+-        }
+-    </div>
+-}
++        @Html.Partial("_RequesterTicketList", Model.OpenTickets)
++    }
++    else
++    {
++        <p>Use this form to create a ticket requesting technical support</p>
++        <div id="full-page-new-ticket">
++            @using (Html.BeginForm())
++            {
++                @Html.AntiForgeryToken()
++                @Html.Partial("_SubmitTicket", new NewTicketViewModel())
++                <div class="modal-footer">
++                    <input id="create_ticket_submit" type="submit" value="Create Ticket" formaction='@Url.Action("Create")' class="btn btn-default"/>
++                    <input id="report_issue_submit" type="submit" value="Report Issue" formaction='@Url.Action("EmailIssue")' class="btn btn-default"/>
++                </div>
++            }
++        </div>
++    }
+ 
+ 
+ 
+-@if (Model.RecentlyClosedTickets.Tickets.Any())
++    @if (Model.RecentlyClosedTickets.Tickets.Any())
+     {
+         <div class="row">
+             <h2>Recently Closed Tickets</h2>
+@@ -97,26 +97,27 @@
+         </div>
+     }
+ 
+-@Html.Partial("_RequesterTicketList", Model.RecentlyClosedTickets)
+-    
++    @Html.Partial("_RequesterTicketList", Model.RecentlyClosedTickets)
++
+     <div class="modal fade" id="createTicketModal" role="dialog" aria-labelledby="createTicketModal" aria-hidden="true">
+         <div class="modal-dialog">
+-        <div class="modal-content">
+-            <div style="text-align:right;">
+-                <button type="button" class="btn btn-default" data-dismiss="modal" style="border: none;" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
+-            </div>
+-            
+-            <div class="modal-body" id="bigdiv">
+-                @using (Html.BeginForm())
+-                {
+-                    @Html.AntiForgeryToken()
+-                    @Html.Partial("_SubmitTicket", new NewTicketViewModel())
+-                    <div class="modal-footer">
+-                        <input id="create_ticket_submit" type="submit" value="Create Ticket" formaction='@Url.Action("Create")' class="btn btn-default" />
+-                        <input id="report_issue_submit" type="submit" value="Report Issue" formaction='@Url.Action("EmailIssue")' class="btn btn-default"/>
+-                    </div>
+-                }
++            <div class="modal-content">
++                <div style="text-align: right;">
++                    <button type="button" class="btn btn-default" data-dismiss="modal" style="border: none;" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
++                </div>
+ 
++                <div class="modal-body" id="bigdiv">
++                    @using (Html.BeginForm())
++                    {
++                        @Html.AntiForgeryToken()
++                        @Html.Partial("_SubmitTicket", new NewTicketViewModel())
++                        <div class="modal-footer">
++                            <input id="create_ticket_submit" type="submit" value="Create Ticket" formaction='@Url.Action("Create")' class="btn btn-default"/>
++                            <input id="report_issue_submit" type="submit" value="Report Issue" formaction='@Url.Action("EmailIssue")' class="btn btn-default"/>
++                        </div>
++                    }
++
++                </div>
+             </div>
+         </div>
+     </div>
+Index: Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Views/Shared/_SubmitTicket.cshtml
+===================================================================
+--- Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Views/Shared/_SubmitTicket.cshtml	(revision 30021)
++++ Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Views/Shared/_SubmitTicket.cshtml	(working copy)
+@@ -47,9 +47,9 @@
+                     <input type="file" id="file_0" class="hidden" onchange="make_blob(this, 0)" />
+                     <input type="hidden" id="file_name_0" />
+                     <input type="hidden" name="data" id="base64data_0" />
+-                </div>
+             </div>
+         </div>
++    </div>
+   
+     <br />
+             
+@@ -78,7 +78,7 @@
+                 <label for="exampleInputEmail1">Ticket requested on behalf of:</label>
+             </div>
+             
+-            <div class="col-xs-6">
++            <div class="col-xs-6">                
+                 @* This is populated via Select2 TypeAhead *@
+                 <select name="requester_id" class="form-control" id="ddlRequesterId" style="width: 100%;" aria-invalid="False"></select>
+             </div>
+@@ -85,5 +85,3 @@
+         </div>
+     </div>
+ </div>
+-
+-<script src="~/Areas/TSC/Scripts/BlobAttach.js"></script>
+Index: Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Views/TSC/_TSCTicketList.cshtml
+===================================================================
+--- Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Views/TSC/_TSCTicketList.cshtml	(revision 30021)
++++ Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Views/TSC/_TSCTicketList.cshtml	(working copy)
+@@ -35,7 +35,7 @@
+                             }
+                             <!-- What you have to click for Modal to open -->
+                             <a data-toggle="modal" id="attachModal">
+-                                <span class="stopDropDown" data-ticket_id="@ticket.Ticket_ID" onclick="openAttModal(this)">
++                                <span class="stopDropDown" data-ticket_id="@ticket.Ticket_ID" onclick=" openAttModal(this) ">
+                                     <span class="glyphicon glyphicon-paperclip"></span>
+                                 </span>
+                             </a>
+@@ -57,13 +57,13 @@
+                                         default:
+                                             {
+                                                 @Html.Raw("<a style='position:relative;' onclick='confirmCancelTicket(" + ticket.Ticket_ID + ")'><span id='spinnerHolder_" + ticket.Ticket_ID + "'></span>Cancel Ticket</a>");
+-                                                                                                                                                                                                                     break;
++                                                                                                                                                                                                                             break;
+                                             }
+                                     }
+                                     @* Prevent page error for legacy administrative tickets *@
+                                     @if (ticket.Campus_Code != "0")
+                                     {
+-                                    <small style="font-weight:bold;" id="campus_name_@ticket.Ticket_ID">@Model.Campuses.First(c => c.Campus_Code == ticket.Campus_Code).Campus_Descr</small>
++                                        <small style="font-weight:bold;" id="campus_name_@ticket.Ticket_ID">@Model.Campuses.First(c => c.Campus_Code == ticket.Campus_Code).Campus_Descr</small>
+                                     }
+                                     
+                                 </span>
+@@ -91,7 +91,7 @@
+                                         case 1: <span id="glyph_@ticket.Ticket_ID" class="glyphicon glyphicon-list-alt" @Html.Raw("style='vertical-align\x3A text-top'")></span>
+                                         <span id="status_descr_@ticket.Ticket_ID">@ticket.Tsc_Status_LK.Status</span>
+                                             break;
+-    case 2: <span id="glyph_@ticket.Ticket_ID" class="glyphicon glyphicon-play blue" @Html.Raw("style='vertical-align\x3A text-top'")></span>
++                                        case 2: <span id="glyph_@ticket.Ticket_ID" class="glyphicon glyphicon-play blue" @Html.Raw("style='vertical-align\x3A text-top'")></span>
+                                             <span class="blue" id="status_descr_@ticket.Ticket_ID">@ticket.Tsc_Status_LK.Status</span>
+                                             break;
+                                         case 3: <span id="glyph_@ticket.Ticket_ID" class="glyphicon glyphicon-time red" @Html.Raw("style='vertical-align\x3A text-top'")></span>
+@@ -152,67 +152,67 @@
+                         <!--  End of right side -->
+                     </div>
+                 </div>
+-                <div id="collapseAccord_@ticket.Ticket_ID" class="collapse">
++        <div id="collapseAccord_@ticket.Ticket_ID" class="collapse">
+             <div id="ticket-attachments_@ticket.Ticket_ID" class="attachments"></div>
+-                    @if (ticket.Status_ID == 5 || ticket.Status_ID == 6)
+-                    {
+-                        @Html.Partial("_DisplayTicket", new EditViewModel(ticket))
+-                    }
+-                    else
+-                    {
+-                        @Html.Partial("_Edit", new EditViewModel(ticket))
++            @if (ticket.Status_ID == 5 || ticket.Status_ID == 6)
++            {
++                @Html.Partial("_DisplayTicket", new EditViewModel(ticket))
++            }
++            else
++            {
++                @Html.Partial("_Edit", new EditViewModel(ticket))
+ 
+-                    }
++            }
+ 
+ 
+             <table id="table_@ticket.Ticket_ID" class="table table-striped table-condensed table-bordered worklog" style="table-layout: fixed; word-wrap: break-word;">
+-                        @if (ticket.Status_ID != 5 && ticket.Status_ID != 6)
+-                        {
+-                            <tr class="hidden">
+-                                <td colspan="3">
+-                                    @using (Html.BeginForm())
+-                                    {
+-                                        <div class='input-group' style="width:100%">
+-                                            @Html.AntiForgeryToken()
+-                                            @Html.EditorFor(t => t.WorkLog.Work, new { htmlAttributes = new { @class = "form-control", placeholder = "Log Entry Description", style = "border-radius: 4px", id = "log" } })
+-                                            <span class="hidden" id="you">@ViewBag.You</span>
+-                                            <span id="forSpinner_@ticket.Ticket_ID"></span>
+-                                            <span class="input-group-btn" style="padding-left:12px"><button type="button" class="btn btn-danger btn-xs glyphicon glyphicon-remove" onclick="closeLogInput(@ticket.Ticket_ID)"></button></span>
+-                                            <span class="input-group-btn" id="submission" style="padding-left:5px"><button type="button" class="btn btn-primary btn-xs glyphicon glyphicon-ok" style="border-radius: 3px;" onclick="addWorkLog(@ticket.Ticket_ID)"></button></span>
+-                                        </div>
+-                                    }
+-                                </td>
+-                            </tr>
+-                        }
++                @if (ticket.Status_ID != 5 && ticket.Status_ID != 6)
++                {
++                    <tr class="hidden">
++                        <td colspan="3">
++                            @using (Html.BeginForm())
++                            {
++                                <div class='input-group' style="width:100%">
++                                    @Html.AntiForgeryToken()
++                                    @Html.EditorFor(t => t.WorkLog.Work, new { htmlAttributes = new { @class = "form-control", placeholder = "Log Entry Description", style = "border-radius: 4px", id = "log", onkeypress = "checkForSubmission(event, this)" } })
++                                    <span class="hidden" id="you">@ViewBag.You</span>
++                                    <span id="forSpinner_@ticket.Ticket_ID"></span>
++                                    <span class="input-group-btn" style="padding-left:12px"><button type="button" class="btn btn-danger btn-xs glyphicon glyphicon-remove" onclick="closeLogInput(@ticket.Ticket_ID)"></button></span>
++                                    <span class="input-group-btn" id="submission" style="padding-left:5px"><button type="button" class="btn btn-primary btn-xs glyphicon glyphicon-ok" style="border-radius: 3px;" onclick="addWorkLog(@ticket.Ticket_ID)"></button></span>
++                                </div>
++                            }
++                        </td>
++                    </tr>
++                }
+ 
+-                        @{ var logs = ticket.Tsc_Work_Log.OrderByDescending(t => t.Date_Worked);}
+-                        @foreach (var workLogEntry in logs)
+-                        {
+-                            <tr>
++                @{ var logs = ticket.Tsc_Work_Log.OrderByDescending(t => t.Date_Worked);}
++                @foreach (var workLogEntry in logs)
++                {
++                    <tr>
+                         <td style="width: 10%" class="log-date">@workLogEntry.Date_Worked.ToString("MM/dd/yyyy")</td>
+                         <td style="width: 70%">@workLogEntry.Work</td>
+                         <td style="width: 20%">
+-                                    @if (Model.Employees.Any(u => u.EMPLID == workLogEntry.Assignee_ID))
+-                                    {
+-                                        @Model.Employees.First(u => u.EMPLID == workLogEntry.Assignee_ID).NAME
+-                                    }
+-                                    else
+-                                    {
+-                                        @workLogEntry.Assignee_ID
+-                                    }
+-                                    @if (ticket.Status_ID != 5 && ticket.Status_ID != 6)
+-                                    {
+-                                        <div id="addLogBtn_@ticket.Ticket_ID" class="pull-right" onclick="openLogInput(this, @ticket.Ticket_ID)">
+-                                            @if (workLogEntry == logs.First())
+-                                            { <span class="glyphicon glyphicon-plus btn btn-primary btn-xs"></span> }
+-                                        </div>
+-                                    }
++                            @if (Model.Employees.Any(u => u.EMPLID == workLogEntry.Assignee_ID))
++                            {
++                                @Model.Employees.First(u => u.EMPLID == workLogEntry.Assignee_ID).NAME
++                            }
++                            else
++                            {
++                                @workLogEntry.Assignee_ID
++                            }                                    
++                            @if (ticket.Status_ID != 5 && ticket.Status_ID != 6)
++                            {
++                                <div id="addLogBtn_@ticket.Ticket_ID" class="pull-right" onclick="openLogInput(this, @ticket.Ticket_ID)">
++                                    @if (workLogEntry == logs.First())
++                                    { <span class="glyphicon glyphicon-plus btn btn-primary btn-xs"></span> }
++                                </div>
++                            }
+ 
+-                                </td>
+-                            </tr>
+-                        }
+-                    </table>
+-                </div>
++                        </td>
++                    </tr>
++                }
++            </table>
++        </div>
+                 <!-- End of What you have to click for table to collapse -->
+             <!-- End of MEGA Button -->
+     </div>
+@@ -240,7 +240,7 @@
+                         @if (attachment != null)
+                         {
+                             <a class="btn btn-xs btn-default" style="vertical-align: middle; border: none;" onclick='remove_file(this, @attachment.Ticket_Attachment_ID, @ticket.Ticket_ID)'><span class="glyphicon glyphicon-remove" style="top: 15%"></span></a>
+-}
++                        }
+ 
+ 
+ 
+Index: Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Views/TSC/Index.cshtml
+===================================================================
+--- Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Views/TSC/Index.cshtml	(revision 30021)
++++ Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Views/TSC/Index.cshtml	(working copy)
+@@ -28,12 +28,13 @@
+     <div id="antiForgeryToken">@Html.AntiForgeryTokenForAjaxPost()</div>
+ </div>
+ 
++<body onload="makeChangesForMobile()">
+ <div class="container">
+     <div class="row">
+-            <div class="col-xs-8">
++            <div class="col-xs-10">
+                 <div class="h2">Technical Support</div>
+             </div>
+-            <div class="col-xs-4" style="padding-top: 20px;">
++            <div class="col-xs-2" style="padding-top: 20px;">
+                 <button type="button" id="newTicketButton" class="btn btn-primary pull-right" data-toggle="modal" data-target="#createTicketModal"><span class="glyphicon glyphicon-plus"></span> New Ticket</button>
+             </div>
+         </div>
+@@ -201,6 +202,7 @@
+         </div>
+     </div>
+ </div>
++</body>
+ 
+ <div class="modal fade" id="workLogModal" tabindex="-1" role="dialog" aria-labelledby="workLogModal" aria-hidden="true">
+     <div class="modal-dialog">

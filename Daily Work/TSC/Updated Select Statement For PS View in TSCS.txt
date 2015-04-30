@@ -1,0 +1,9 @@
+SELECT     TOP (100) PERCENT PS.dbo.PS_N__LDAP_DATA.N__User_ID, PS.dbo.PS_PERSONAL_PHONE.Phone_Cleaned, PS.dbo.PS_EMAIL_ADDRESSES.EMAIL_ADDR
+FROM         PS.dbo.PS_Names INNER JOIN
+                      PS.dbo.PS_PERSONAL_PHONE ON PS.dbo.PS_Names.EMPLID = PS.dbo.PS_PERSONAL_PHONE.EMPLID AND 
+                      PS.dbo.PS_PERSONAL_PHONE.PREF_PHONE_FLAG = 'Y' INNER JOIN
+                      PS.dbo.PS_N__LDAP_DATA ON PS.dbo.PS_Names.EMPLID = PS.dbo.PS_N__LDAP_DATA.EMPLID INNER JOIN
+                      PS.dbo.PS_EMAIL_ADDRESSES ON PS.dbo.PS_Names.EMPLID = PS.dbo.PS_EMAIL_ADDRESSES.EMPLID
+GROUP BY PS.dbo.PS_Names.NAME, PS.dbo.PS_PERSONAL_PHONE.Phone_Cleaned, PS.dbo.PS_Names.EMPLID, PS.dbo.PS_N__LDAP_DATA.N__User_ID, 
+                      PS.dbo.PS_EMAIL_ADDRESSES.EMAIL_ADDR
+ORDER BY PS.dbo.PS_Names.NAME

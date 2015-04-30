@@ -1,0 +1,1 @@
+Added Edit TSC's button. Created modal for it. Made two tables in the modal to display active and inactive TSC's. Added radio buttons to represent inactive or active states. Hooked it up to the database wih the controller. You can now edit inactive or active statuses.

@@ -1,0 +1,17 @@
+
+Prospect_ID = 199710
+Coordinator_ID = 1030697
+Effective_Date = 2014-08-29 06:17:05.553
+Assignment_Notes = No Zip or Region match with capacity.  Matching by greatest capacity. Coordinator 1030697 has capacity of -81
+
+Next the InsertProspectCoordinator method in AddProspectDB.cs was called which inserted a new record with a new Coordinator_ID. This didn't get rid of the previous record however, so 
+we now have two records, both with the same Prospect_ID, however they have different Coordinator_IDs. I found this out by finding 'updated from' throughout the entire solution and only one instance appeared. 
+
+-----SECOND RECORD MADE FROM ABOVE INSERT INTO FUNCTION-----
+
+Prospect_ID = 199710
+Coordinator_ID = 3329372
+Effective_Date = 2014-09-03 11:43:43.217
+Assignment_Notes = updated from 1030697 to 3329372
+
+Next there was a call to the Delete method in the Models.cs file. This

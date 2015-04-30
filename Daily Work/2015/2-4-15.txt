@@ -1,0 +1,5 @@
+Added Program Drop Down List to Navbar.ascx. Added JS for RadWindows. Added Telerik for RadWindows.
+Added method in the backend of the navbar to get the Programs from a method in App_Code/DAL/ManageDB.cs.
+Added the new method in ManageDB.cs which grabs the raw data from the DB.
+Added case statements in Mgmt.aspx.cs for each RadWindow of programcreate and program search.
+Added ProgramCreate ProgramSearch User Controls.

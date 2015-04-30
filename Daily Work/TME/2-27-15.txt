@@ -1,0 +1,1 @@
+Write method to get projects by program id, put in array, write method to get milestones by prject id, foreach through initial array.

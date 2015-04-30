@@ -1,0 +1,1 @@
+A hash symbol with nothing after it is considered an "empty fragment" which displays the top of the page. 

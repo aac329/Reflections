@@ -1,0 +1,67 @@
+(/Tme/Controls/UserControls/Navbar.ascx)
+//This is the front-end code for the dropdown list for programs
+
+<li class="dropdown">
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown">Program<b class="caret"></b></a>
+	<ul class="dropdown-menu">
+		<li><a href="/tme/Programs.aspx?id=all">All</a></li>
+		<li><a href="#" onclick="OpenWindowProgramCreate();">Create</a></li>
+		<li><a href="#" onclick="OpenWindowProgramSearch();">Search</a></li>
+		<li class="divider"></li>
+		<asp:Literal runat="server" ID="ltPrograms">
+	</ul>
+</li>
+
+
+
+
+
+(/Tme/Controls/UserControls/Navbar.ascx)
+//This is the JS needed to bring up the create Program and Search Program pages
+
+<script type="text/javascript">
+
+	function OpenWindowProgramCreate() {
+		radopen("Mgmt.aspx?m=11&cid=programcreate", "radProgramCreate");
+		return false;
+	}
+
+	function OpenWindowProgramSearch() {
+		radopen("Mgmt.aspx?m=11&cid=programsearch", "radProgramSearch");
+		return false;
+	}
+
+<script>
+
+
+
+
+
+(/Tme/Controls/UserControls/Navbar.ascx)
+//This needs to be included into the telerik/Windows section
+
+<telerik:RadWindow
+	ID="radProgramCreate"
+	runat="server"
+	width="800"
+	Height="720"
+></telerik:Window>
+
+<telerik:RadWindow
+	ID="radProgramSearch"
+	runat="server"
+	width="600"
+	Height="275"
+></telerik:Window>
+
+
+
+
+
+(/Tme/Controls/UserControls/Navbar.ascx.cs)
+//This is going to be the backend for bringing forth the list of Programs for the Programs DDL
+
+protected void LoadPrograms()
+{
+	
+}

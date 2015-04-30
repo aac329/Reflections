@@ -1,0 +1,61 @@
+<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ProgramCreate.ascx.cs" Inherits="Tme.Controls.UserControls.ProgramCreate"%>
+<%Register TagPrefix="Uploader" TagName="ProgUploader" Src="ProgramsUploader.ascx">
+<%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
+
+<script type="text/javascript">
+    function GetRadWindowProgCreate() {
+        var oWindow = null;
+        if (window.radWindow)
+            oWindow = window.RadWindow;
+        else if (window.frameElement.radWindow)
+            oWindow = window.frameElement.radWindow;
+        return oWindow;
+    }
+
+    function CloseProgCreate() {
+        GetRadWindowProgCreate().Close();
+    }
+</script>
+
+<telerik:RadScriptBlock ID="RadScriptBlock1" runat="server">
+    <script type="text/javascript">
+        function pageLoad() {
+            if (!Telerik.Web.UI.RadAsyncUpload.Modules.FileApi.isAvailable()) {
+                $(".uploader_warning").html("<strong>Your browser does not support Drag and Drop. Please take a look at the info box for additional information.</strong>").css("color", "red");
+            } else {
+                $(document).bind({ "drop": function (e) { e.preventDefault(); } });
+            }
+        }
+    </script>
+</telerik:RadScriptBlock>
+
+<h4>Create Program</h4>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-9 form-horizontal">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">Title</label>
+				<div class="col-sm-6">
+					<asp:TextBox runat="server" ID="txtTitle" MaxLength="50" Text='<%# Bind("Title") %>' CssClass="form-control"></asp:TextBox>
+					<asp:RequiredFieldValidator ID="rfvTitle" ControlToValidate="txtTitle" runat="server" ErrorMessage="Please provide a title. (50 characters)" Display="Dynamic"></asp:RequiredFieldValidator>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">Program Scope</label>
+				<div class="col-sm-6">
+					<asp:TextBox runat="server" ID="txtProgramScope" MaxLength="500" Text='<%# Bind("Program_Scope") %>' CssClass="form-control"></asp:TextBox>
+					<asp:RequiredFieldValidator ID="rfvProgramScope" ControlToValidate="txtProgramScope" runat="server" ErrorMessage="Please provide a scope for the program. (500 characters)" Display="Dynamic"></asp:RequiredFieldValidator>
+				</div>
+			</div>
+            		<div class="form-group">
+                		<label class="col-sm-2 control-label">Status</label>
+                		<div class="col-sm-3">
+                    		<asp:DropDownList runat="server" ID="ddlStatus" CssClass="form-control">
+                        		<asp:ListItem Text="Active" Value="A"></asp:ListItem>
+                        		<asp:ListItem Text="In-Active" Value="I"></asp:ListItem>
+                    		</asp:DropDownList>
+                		</div>
+            		</div>
+		</div>
+	</div>
+</div>

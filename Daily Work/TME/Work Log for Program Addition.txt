@@ -1,0 +1,8 @@
+Thursday 1/22/2015 - 2 hours
+
+Wrote the code for the front end of the Navbar. This included the JS, the Telerik, and the HTML. Spoke with Dennis about the project. 
+
+Friday 1/23/2015 - 6 hours
+
+Kept working on backend stuff including db connections and sql strings. Grabbing data and sending it where it needs to go. Also wrote thebackend for the Search and Create RadWindows
+

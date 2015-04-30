@@ -1,0 +1,347 @@
+Index: Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Controllers/ManagerController.cs
+===================================================================
+--- Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Controllers/ManagerController.cs	(revision 29084)
++++ Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Controllers/ManagerController.cs	(working copy)
+@@ -1,5 +1,9 @@
+-﻿using System.Linq;
++﻿using System;
++using System.Data.Entity.Core.Objects;
++using System.Data.Entity.Infrastructure;
++using System.Linq;
+ using System.Text.RegularExpressions;
++using System.Threading.Tasks;
+ using System.Web.Mvc;
+ using Application.Model.Dls;
+ using Apps.Areas.TSC.Models;
+@@ -10,12 +14,12 @@
+ {
+     public class ManagerController : BaseController
+     {
+-        private TscDbEntities db = new TscDbEntities();        
++        private TscDbEntities db = new TscDbEntities();
+ 
+         // GET: TSC/Manager
+-        public ActionResult Index()
++        public async Task<ActionResult> Index()
+         {
+-            var viewModel = new ManagerViewModel();
++            var viewModel = await GetManagerViewModel();            
+ 
+             // If the user is not a TSC, send them back to the requester view OR if they're not a manager
+             var currentTsc = db.Tsc_Tsc.FirstOrDefault(u => u.Assignee_ID == User.EmplID.ToString());            
+@@ -39,16 +43,28 @@
+             {
+                 return RedirectToAction("Index", "Requester");
+             }
+-
++            
+             return View(viewModel);
+         }
+ 
++        public async Task<ActionResult> GetTscEditModal()
++        {
++            var viewModel = await GetManagerViewModel();
++            return PartialView("_EditTscModal", viewModel);
++        }
++
++        private async Task<ManagerViewModel> GetManagerViewModel()
++        {
++            var viewModel = new ManagerViewModel();
++            viewModel.TSCs = db.Tsc_Tsc;
++            return viewModel;
++        }
++
+         // POST: TSC/Manager
+         [HttpPost]
+         [ValidateAntiForgeryToken]
+         public HttpStatusCodeResult Save(int? id, string campusList)
+         {
+-            //Variable declaration 
+             var viewModel = new ManagerViewModel();
+ 
+             campusList = Regex.Replace(campusList, @"[^a-zA-Z0-9\s]", "");
+@@ -100,6 +116,69 @@
+             return new HttpStatusCodeResult(200);
+         }
+ 
++        [HttpPost]
++        [ValidateAntiForgeryToken]
++        public HttpStatusCodeResult SaveTSCs(string activeTSCs, string assigneeID)
++        {
++            activeTSCs = Regex.Replace(activeTSCs, @"[^a-zA-Z0-9\s]", "");
++
++            string[] previousActiveTSCs = db.Tsc_Tsc
++                .Where(x => x.Status == "A")
++                .Select(c => c.Tsc_ID.ToString())
++                .ToArray();
++
++            string[] ActiveTSCs = activeTSCs.Split();
++            ActiveTSCs = ActiveTSCs.Take(ActiveTSCs.Length - 1).ToArray();
++
++            foreach (var oldTSC in previousActiveTSCs)
++            {
++                if (!ActiveTSCs.Contains(oldTSC))
++                {
++                    Tsc_Tsc tscToChange = new Tsc_Tsc();
++                    tscToChange = db.Tsc_Tsc.Find(Convert.ToInt32(oldTSC));
++                    tscToChange.Status = "I";                                        
++                    db.SaveChanges();
++                }
++            }
++
++            foreach (var activeTSC in ActiveTSCs)
++            {
++                if (!previousActiveTSCs.Contains(activeTSC))
++                {
++                    Tsc_Tsc tscToChange = new Tsc_Tsc();
++                    tscToChange = db.Tsc_Tsc.Find(Convert.ToInt32(activeTSC));
++                    tscToChange.Status = "A";                                        
++                    db.SaveChanges();
++                }
++            }
++
++            if (assigneeID != null)
++            {
++                Tsc_Tsc tscToAdd = new Tsc_Tsc();
++                tscToAdd.Assignee_ID = assigneeID;
++                tscToAdd.Manager = "N";
++                tscToAdd.Status = "A";
++                db.Tsc_Tsc.Add(tscToAdd);
++                db.SaveChanges();
++            }
++            db.Dispose();
++            return new HttpStatusCodeResult(200);
++        }
++
++        [HttpPost]
++        [ValidateAntiForgeryToken]
++        public string CheckTSC(string assigneeID)
++        {
++            string name = "";
++
++            if (assigneeID != null)
++            {
++                name = db.vwTsc_PS_Employees.Where(tsc => tsc.EMPLID == assigneeID).ToString();
++            }
++
++            return name;
++        }
++
+         protected override void Dispose(bool disposing)
+         {
+             if (disposing)
+Index: Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/CSS/TscStyles.css
+===================================================================
+--- Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/CSS/TscStyles.css	(revision 29084)
++++ Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/CSS/TscStyles.css	(working copy)
+@@ -147,4 +147,43 @@
+     -moz-user-select: none;
+     -ms-user-select: none;
+     user-select: none;
++}
++
++#enterInformation {
++    background-color: #d9edf7;
++    border-color: #bce8f1;
++    padding-top: 10px;
++    padding-bottom: 10px;
++    margin-left: 25%;
++    margin-right: 25%;
++}
++
++.modalHeader {
++    padding-top: 15px;
++    padding-left: 15px;
++    padding-right: 15px;
++}
++
++.modal-dialog {
++    width: 700px;
++}
++
++#checkAssignee {
++    border: double;
++    padding-top: 10px;
++    padding-bottom: 10px;
++}
++
++#modalBody {
++    margin-left: 20px;
++    margin-right: 20px;
++}
++
++#managerLabel {
++    text-align: left;
++}
++
++#checkTSC {
++    padding-top: 20px;
++    text-align: center;
+ }
+\ No newline at end of file
+Index: Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Scripts/TscManager.js
+===================================================================
+--- Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Scripts/TscManager.js	(revision 29084)
++++ Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Scripts/TscManager.js	(working copy)
+@@ -1,44 +1,67 @@
+-﻿$(function () {
+-    $('div').click(function () {
+-        if ($(this).hasClass("campusTd")) {
+-            $(this).toggleClass("blue-cell");
+-        }
++﻿$(document).ready(function() {
++    $(function() {
++        $('div').click(function() {
++            if ($(this).hasClass("campusTd")) {
++                $(this).toggleClass("blue-cell");
++            }
++        });
+     });
+-});
+ 
+-function saveData() {
+-    var id = $(".in").attr("id");
+-    var antiForgeryToken = $("#antiForgeryToken").text();
+-    var campusList = "";
+-    $('.in').find('.blue-cell').each(function (index) {
+-        campusList += $(this).attr('id') + " ";
+-    });
++    $('#chkTSC').click(function() {
++        var assigneeID = $('#assigneeID').Text;
++        var antiForgeryToken = $("#antiForgeryToken").text();
+ 
+-    var campuses = "";
+-    $('.in').find('.blue-cell').each(function (index) {
+-        campuses += $(this).attr('title') + "*";
++        $.ajax({
++            type: "post",
++            url: "/Apps/tsc/manager/CheckTSC/",
++            data: {
++                __RequestVerificationToken: antiForgeryToken,
++                assigneeID: assigneeID
++            },
++            success: function (name) {
++                $("#Name").Text = name;
++            },
++            error: function () {
++                document.getElementById('errorMessageTSCs').style.display = "table-footer-group";
++            }
++        });
+     });
+ 
+-    $.ajax({
+-        type: "post",
+-        url: "/Apps/tsc/manager/save/",
+-        data: {
+-            __RequestVerificationToken: antiForgeryToken,
+-            id: id,
+-            campusList: JSON.stringify(campusList)
+-        },
+-        success: function () {
+-            $("#" + id).modal('toggle');
++    function saveData() {
++        var id = $(".in").attr("id");
++        var antiForgeryToken = $("#antiForgeryToken").text();
++        var campusList = "";
++        $('.in').find('.blue-cell').each(function(index) {
++            campusList += $(this).attr('id') + " ";
++        });
+ 
+-            var campusHtml = "";
+-            $.each(campuses.split("*"), function (index, value) {
+-                campusHtml += (value + "<br>");
+-            });
++        var campuses = "";
++        $('.in').find('.blue-cell').each(function(index) {
++            campuses += $(this).attr('title') + "*";
++        });
+ 
+-            $("#campuses_" + id).html(campusHtml);
+-        },
+-        error: function () {
+-            document.getElementById('errorMessage').style.display = "table-footer-group";
+-        }
+-    });
+-}
+\ No newline at end of file
++        $.ajax({
++            type: "post",
++            url: "/Apps/tsc/manager/save/",
++            data: {
++                __RequestVerificationToken: antiForgeryToken,
++                id: id,
++                campusList: JSON.stringify(campusList)
++            },
++            success: function() {
++                $("#" + id).modal('toggle');
++
++                var campusHtml = "";
++                $.each(campuses.split("*"), function(index, value) {
++                    campusHtml += (value + "<br>");
++                });
++
++                $("#campuses_" + id).html(campusHtml);
++            },
++            error: function() {
++                document.getElementById('errorMessage').style.display = "table-footer-group";
++            }
++        });
++    }
++
++});
+\ No newline at end of file
+Index: Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/ViewModels/ManagerViewModel.cs
+===================================================================
+--- Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/ViewModels/ManagerViewModel.cs	(revision 29084)
++++ Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/ViewModels/ManagerViewModel.cs	(working copy)
+@@ -30,8 +30,7 @@
+ 
+         public IQueryable<vwTsc_Campuses> Campus
+         {
+-            get { return dbEntities.vwTsc_Campuses; }
+-            set { }
++            get { return dbEntities.vwTsc_Campuses; }            
+         }
+ 
+         public List<SelectListItem> AllCampuses
+@@ -47,7 +46,7 @@
+             }
+         }
+ 
+-        public IEnumerable<Tsc_Tsc> TSCs { get { return dbEntities.Tsc_Tsc; } }
++        public IQueryable<Tsc_Tsc> TSCs { get; set; }
+         public TSCsListViewModel Campus_Assignee_IDs { get; set; }
+         public IEnumerable<Tsc_Campus_Assignee> Campus_Assignee { get { return dbEntities.Tsc_Campus_Assignee; } set { } }
+ 
+Index: Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Views/Manager/Index.cshtml
+===================================================================
+--- Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Views/Manager/Index.cshtml	(revision 29084)
++++ Websites/AdminExtendedNauEdu/SiteRoot/Apps/Areas/TSC/Views/Manager/Index.cshtml	(working copy)
+@@ -9,6 +9,7 @@
+ <link type="text/css" rel="stylesheet" href="~/Areas/TSC/CSS/TscStyles.css"/>
+ <div class="container">
+     <h2>TSC Manager</h2>
++    <button type="button" id="editTSCsButton" class="btn btn-primary pull-right" data-toggle="modal" data-target="#editTSCs"><span class="glyphicon glyphicon-pencil"></span> Edit TSC's</button>
+     <ul class="nav nav-tabs" role="tablist">
+         <li role="presentation"><a href="@Url.Action("Index", "Requester")" role="tab">Requester</a></li>
+         <li role="presentation"><a href="@Url.Action("Index", "Tsc")" role="tab">Manage Tickets</a></li>
+@@ -128,7 +129,7 @@
+                             </div>
+                             <div class="modal-footer">
+                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+-                                <button type="button" class="btn btn-primary" value="Save" onclick=" saveData() ">Save Changes</button>
++                                <button type="button" class="btn btn-primary" value="Save" onclick="saveData()">Save Changes</button>
+                             </div>
+                         </div>
+                     </div>
+@@ -136,6 +137,10 @@
+             </div>
+         }
+     }
++    @*This Modal allows the User to edit the TSC's, which either activats or inactivates them*@
++    <div class="modal fade" id="editTSCs">
++        @Html.Partial("_EditTscModal", Model);
++    </div>
+ </div>
+ <div id="antiForgeryToken" class="hidden">@Html.AntiForgeryTokenForAjaxPost()</div>
+ <script src="~/Areas/TSC/Scripts/TscManager.js"></script>

@@ -1,0 +1,1 @@
+Used alert($scope.event.toSource()); to figure out that the eventForm is storing all the information.

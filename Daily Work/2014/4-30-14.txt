@@ -1,0 +1,15 @@
+Installed Visual Studio 2008
+Updated VS2008 to SP1
+Installed Visual Studio 2010
+Installed Visual Studio 2012
+Installed SQL Server 2008 R2
+Finished steps 1-6 of the IIS Setup and Install Instructions
+Installed Oracle
+
+________________________________________________________________________________________________
+
+Watched a 25 minute video labeled Communication Waterfall July 2013
+Watched an hour long video labeled EC Connect Presentation
+Watched a 30 minute video labeled Lynda.com Overview Presentation
+Watched a 25 minute video labeled Customizing Lync and Outlook Presentation
+Watched an hour long video on Outlook Calender/Mail Organization and tips

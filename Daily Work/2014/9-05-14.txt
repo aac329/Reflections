@@ -1,0 +1,5 @@
+            //if (window.location.href.length == 42) {
+            //    window.location.href = window.location.href.substr(0, window.location.href.length - 1);
+            //}
+
+Any change to window.location will trigger a page refresh. You can change window.location.hash without triggering the refresh (though the window will jump if your hash matches an id on the page), but you can't get rid of the hash sign.

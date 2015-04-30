@@ -1,0 +1,4 @@
+Still working on the clickable div. Tried using CSS to make it work, however that made many links on the page disappear.
+Next I tried using js to redirect the link to the entire div but I'm having some difficulty with it.
+Got it to work using CSS but now I need to edit the z indices to make everything work.
+Moved the collapse to the div and href is invalid, but works. Now everything in the div collapses no matter what's clicked.

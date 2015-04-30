@@ -1,0 +1,4 @@
+Spent awhile trying to figure out a 403 Error that I was getting when trying to access local. 
+Fixed the problem and got back to my task. I changed the AutoPostBack from True to False in both
+viewtask.aspx and quicktask.aspx underneath the assignee divs.
+This makes it so you can select multiple assignees for a task. 

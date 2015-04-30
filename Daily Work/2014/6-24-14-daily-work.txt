@@ -1,0 +1,3 @@
+Worked on creating the edit-in-place form in a practice document on my local machine. I got it to work!
+
+I moved to the manageassignedtickets view. I removed the old ticket title, description, and buttons. I added a few js files and a css file for angular xeditable. I began working on recreating the ticket with angular xeditable but I'm stuck with the edit button. For some reason it won't bring up the edit options. I'll be looking more into it tomorrow.

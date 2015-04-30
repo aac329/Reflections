@@ -1,0 +1,23 @@
+    <nav class="navbar navbar-default" id="mobileNav" style="border-left-style: none; border-right-style: none; border-top-style: none;">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mobile-navbar-collapse">
+                    <span class="sr-only">Toggle Navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="mobile-navbar-collapse">
+                <ul class="nav navbar-nav" id="mobileNav">
+                    <li role="presentation"><a href="@Url.Action("Index", "Requester")" role="tab">Requester</a></li>
+                    <li role="presentation"><a href="@Url.Action("Index", "Tsc")" role="tab">Manage Tickets</a></li>
+                    @if (ViewBag.Tsc == 2)
+                    {
+                        <!-- Add tab for TSC manager-->
+                        <li role="presentation" class="active"><a href="@Url.Action("Index", "Manager")" role="tab">TSC Management</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>

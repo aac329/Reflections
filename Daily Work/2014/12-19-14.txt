@@ -1,0 +1,3 @@
+Changed colors of hover and selected cell in campus table to blue, not green. Changed title and viewbag.title to TSC Manager. 
+Added quite a few records to the campus assignee table and re ran my page. All the campuses are highlighting like expected except CHINLE.
+I think there may be a problem with how the Tsc_Campus_Assignee table is set up. We may need every assignee to have each record of campus and insert an active/inactive column to allow for editing, or else there will be a million inserts of repetitive data.

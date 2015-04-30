@@ -1,0 +1,45 @@
+<adminLayout:adminHeaderv2Pt2 ID="AdminHeaderv2Pt1" runat="server" />
+<adminLayout:adminFooterv2 ID="AdminFooterv1" runat="server" />
+
+<%@ Register TagPrefix="adminLayout" Namespace="customcontrols.AdminLayout" Assembly="customcontrols"
+<adminLayout:adminHeaderv2 ID="AdminHeaderv1" runat="server" pageTitle="CategoryType" />
+
+
+    <form id="form" runat="server">
+	</form>        
+	
+	<style type="text/css">
+#content table.tabular 
+{
+width: auto;
+}
+fieldset div 
+{
+background:none;
+}
+#content table input 
+{
+width : auto;
+}
+</style>
+
+<adminLayout:adminHeaderv2Pt2 ID="AdminHeaderv2Pt1" runat="server" />
+<adminLayout:adminFooterv2 ID="AdminFooterv1" runat="server" />
+
+<adminLayout:adminHeaderv2 ID="AdminHeaderv1" runat="server" pageTitle="DLOrganizationChart" />
+
+    <form id="form" runat="server">
+	</form>   
+
+<adminLayout:adminHeaderv2 ID="AdminHeaderv1" runat="server" pageTitle="AddDLUsers" />
+<adminLayout:adminHeaderv2Pt2 ID="AdminHeaderv2Pt1" runat="server" />
+
+<adminLayout:adminHeaderv2 ID="AdminHeaderv1" runat="server" pageTitle="AddDLUsers" />
+
+<adminLayout:adminHeaderv2Pt2 ID="AdminHeaderv2Pt1" runat="server" />
+        <form id="form" runat="server">
+
+<adminLayout:adminHeaderv2 ID="AdminHeaderv1" runat="server" pageTitle="AddExistingEmployee" />
+
+<adminLayout:adminHeaderv2Pt2 ID="AdminHeaderv2Pt1" runat="server" />
+    <form id="form" runat="server">

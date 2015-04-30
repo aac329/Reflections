@@ -1,0 +1,13 @@
+update Distance.dbo.Prospect_Employee_Process 
+set Qualified_Date = Effective_Date
+from Distance.dbo.Prospect_Points
+where Distance.dbo.Prospect_Points.Prospect_ID in (182312
+,182915
+,182922
+,182939
+,182941
+,182949
+,182951
+,182968
+,183029)
+  and Point_Value=20;

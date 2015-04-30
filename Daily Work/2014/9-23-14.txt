@@ -1,0 +1,22 @@
+classes in apps\areas\tsc\controllers
+
+-AssigneeConroller.cs (Moved to Manager folder)
+-NewUserController.cs  (just a default controller. The other controller already does this. Nothing valuable here)
+-RequesterController.cs (just a default controller. The other controller already does this. Nothing valuable here)
+-TicketController.cs (moved to tsc folder)
+-TSCController.cs (moved methods to manageassignedticketscontroller.cs)
+
+classes in apps\areas\tsc\controllers\manager
+
+-ManageTscController.cs
+
+classes in apps\areas\tsc\controllers\Requester
+
+-CurrentUserController.cs
+-NewUserController.cs
+-RecentUserController.cs
+
+classes in apps\areas\tsc\controllers\TSC
+
+-ManageAssignedTicketsController.cs (moved methods from TSCcontroller.cs to this class since it refers to the manageassignedtickets view)
+

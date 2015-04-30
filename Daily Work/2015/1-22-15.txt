@@ -1,0 +1,12 @@
+Switched manager status to 'N'. Results:
+
+The tab wouldn't show up on the Requester or Manager view, however you could still hit the Manager view, which needs to be changed.
+
+I changed the if statement in the controller to include a portion checking if the User is a Manager.
+
+Now if the User isn't a Manager, it will redirect them to the Requester View.
+
+I changed my active status from 'A' to 'I'. 
+
+The tab list didn't appear in the Requester view. (with Manager = 'N' and status = 'I', that's the view I can see)
+

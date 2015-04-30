@@ -1,0 +1,11 @@
+Tried working with angular to create an editable field, however I couldn't figure out how to integrate it properly.
+
+I then decided to move along and try making the previous edit option look nicer by changing the button types, position of button, and removing button group.
+
+Put the inputs into form control divs to give them a bootstrappy feel, and sized them. Size will probably be changed in future.
+
+Added a few breaks for spacing needs.
+
+Decided to mess with the columns for the date, attachments, and campus code to make it look nicer.
+
+Changed the title of the page to Technical Support like in the pdf.

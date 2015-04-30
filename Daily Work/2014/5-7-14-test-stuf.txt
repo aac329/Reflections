@@ -1,0 +1,8 @@
+<adminlayout:adminheaderv2 id="AdminHeaderv1" runat="server" pagetitle="Employee-Door Access" />
+<adminlayout:adminfooterv2 id="AdminFooterv1" runat="server" />
+
+<adminLayout:adminHeaderv2 ID="AdminHeaderv1" runat="server" pageTitle="ESEmployee" />
+<adminLayout:adminHeaderv2Pt2 ID="AdminHeaderv2Pt1" runat="Server" hideMenu="true" />
+
+                    <div class="textbox"><label for="lblPhone">NAU Empl Desk:</label>
+                        <asp:TextBox ID="txtPhone" runat="server" ReadOnly="true"></asp:TextBox></div>

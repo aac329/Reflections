@@ -1,0 +1,26 @@
+
+https://local.admin.extended.nau.edu/Tme/viewtask.aspx
+
+<%@ Register Src="/TME/Controls/UserControls/Navbar.ascx" TagName="TMEToolBar" TagPrefix="uc1" %>
+<uc1:TMEToolBar ID="TMEToolBar1" runat="server"></uc1:TMEToolBar> 
+
+Redirect to Navbar.ascx
+
+--Add Program to TME navbar in navbar.ascx (Check notepad - TME DDL for Program)
+--This includes the necessary JS, HTML, and Telerik additions
+
+Go to backend at Navbar.ascx.cs
+
+--Add a method to load the programs. This will connect to the ManageDB.cs file. Once there, you'll need to write a method to grab the data from the distance.dbo.Tme_Program table
+
+Go to ManageDB.cs in TME -> App_Code -> DAL
+
+--Add a method to grab raw data from table in database
+
+Go to Mgmt.aspx.cs
+
+--Add the two case statements to the switch block 
+
+--Make new ascx for ProgramCreate
+
+--Make new ascx for ProgramSearch

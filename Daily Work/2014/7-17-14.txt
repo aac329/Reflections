@@ -1,0 +1,5 @@
+I need to make the get method work so that someone can 'Get' the right event when the modal appears.
+Also, the ID of the events aren't be set before they're ran through the ToDbEvent method in the extensionmethods.cs. I'm not sure exactly when ID's are being set.
+Since I can;t 'Get' the right events, I can't 'update' the events. Another problem is that the Save button is set to 'Add' instead of 'update' when you click on an already existing event, which needs to be fixed.
+
+ToDo: 'Get' method to make right events appear. THEN focus on Streaming_Live_Event_Id and when it's set. THEN work on 'Update' and 'Add' (when id != update?).

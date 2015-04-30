@@ -1,0 +1,47 @@
+<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ProgramSearch.ascx.cs" Inherits="Tme.Controls.UserControls.ProgramSearch" %>
+
+<script type ="text/javascript" >
+    function GetRadWindowProgSearch() {
+        var oWindow = null;
+        if (window.radWindow)
+            oWindow = window.RadWindow;
+        else if (window.frameElement.radWindow)
+            oWindow = window.frameElement.radWindow;
+        return oWindow;
+    }
+
+    function CloseProgSearch() {
+        GetRadWindowProgSearch().Close();
+    }
+
+    function redirectpageProgSearch() {
+        var programText = $('.txtProgramClass').val();
+        var url = "/tme/ProgramSearch.aspx?title=" + programText + "&status=" + $('.rblTmeProgram input:checked').val();
+        GetRadWindowProgSearch().BrowserWindow.location.href = url;
+    }
+</script>
+
+<h4>Program Search</h4>
+<div class="col-md-9 form-horizontal">
+	<div class="form-group" style="margin-bottom: 0 !important;">
+		<div class="col-sm-offset-1 col-sm-10">
+			<asp:RadioButtonList ID="radioButtonList1" runat="server" RepeatDirection="Horizontal" CssClass="rblTmeProgram">
+				<asp:ListItem Text="Active" Value="A"></asp:ListItem>
+				<asp:ListItem Text="Inactive" Value="I"></asp:ListItem>
+				<asp:ListItem Text="All" Selected="True" Value="All"></asp:ListItem>
+			</asp:RadioButtonList>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-1 control-label">Search Programs: </label>
+		<div class="col-sm-6">
+			<asp:TextBox ID="txtProgramSearch" runat="server" CssClass="form-control txtProgramClass" placeholder="Enter Program Title"></asp:TextBox>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-offset-1 col-sm-10">
+		<asp:Button ID="btnClose" runat="server" Text="Close" Width="50px" OnClientClick="CloseProgSearch();" CssClass="btn btn-default" />
+		<asp:Button ID="btnSearch" runat="server" Text="Search" Width="60px" CauseValidation="true" OnClientclick="redirectpageProgSearch();" CssClass="btn btn-primary" />
+		</div>
+	</div>
+</div>

@@ -1,0 +1,22 @@
+INSERTS FOR dbo.TSC_Campus_LK
+___________________________________
+
+INSERT INTO Tsc_Campus_LK (Campus_Code, Campus) VALUES ('QCREK', 'Communiversity @ Queen Creek');
+
+
+
+
+INSERTS FOR dbo.TSC_Status_LK
+___________________________________
+
+INSERT INTO Tsc_Status_LK (Status_ID, Status, Tool_Tip) VALUES (1, 'Initial Review', 'The task is currently under review.');
+
+INSERT INTO Tsc_Status_LK (Status_ID, Status, Tool_Tip) VALUES (2, 'In Progress', 'The task is currently in progress.');
+
+INSERT INTO Tsc_Status_LK (Status_ID, Status, Tool_Tip) VALUES (3, 'Waiting', 'The task is waiting.');
+
+INSERT INTO Tsc_Status_LK (Status_ID, Status, Tool_Tip) VALUES (4, 'Ongoing', 'The task s ongoing.');
+
+INSERT INTO Tsc_Status_LK (Status_ID, Status, Tool_Tip) VALUES (5, 'Cancelled', 'The task is cancelled.');
+
+INSERT INTO Tsc_Status_LK (Status_ID, Status, Tool_Tip) VALUES (6, 'Closed', 'The task is closed.');

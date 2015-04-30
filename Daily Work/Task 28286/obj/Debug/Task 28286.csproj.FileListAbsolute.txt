@@ -1,0 +1,6 @@
+C:\Users\aac329\Desktop\Daily Work\Task 28286\bin\Task 28286.dll.config
+C:\Users\aac329\Desktop\Daily Work\Task 28286\bin\Task 28286.dll
+C:\Users\aac329\Desktop\Daily Work\Task 28286\bin\Task 28286.pdb
+C:\Users\aac329\Desktop\Daily Work\Task 28286\obj\Debug\Task 28286.csprojResolveAssemblyReference.cache
+C:\Users\aac329\Desktop\Daily Work\Task 28286\obj\Debug\Task 28286.dll
+C:\Users\aac329\Desktop\Daily Work\Task 28286\obj\Debug\Task 28286.pdb
