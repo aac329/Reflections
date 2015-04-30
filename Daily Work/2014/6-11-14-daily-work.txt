@@ -1,5 +1,0 @@
-Added a collapse-able table to the tickets to show work logs. Has three columns for date, time, and descr.
-Log Entry Description also shows. Added two buttons with glyphs in them. When attachments is clicked, a modal pops up.
-Put the table of attachments in the table. Added close and update buttons to attachments modal.
-Added upload button to attachments modal.
-

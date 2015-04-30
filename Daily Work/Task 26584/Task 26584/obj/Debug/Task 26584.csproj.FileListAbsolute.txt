@@ -1,6 +1,0 @@
-C:\Users\aac329\Desktop\Daily Work\Task 26584\Task 26584\bin\Task 26584.dll.config
-C:\Users\aac329\Desktop\Daily Work\Task 26584\Task 26584\bin\Task 26584.dll
-C:\Users\aac329\Desktop\Daily Work\Task 26584\Task 26584\bin\Task 26584.pdb
-C:\Users\aac329\Desktop\Daily Work\Task 26584\Task 26584\obj\Debug\Task 26584.dll
-C:\Users\aac329\Desktop\Daily Work\Task 26584\Task 26584\obj\Debug\Task 26584.pdb
-C:\Users\aac329\Desktop\Daily Work\Task 26584\Task 26584\obj\Debug\Task 26584.csprojResolveAssemblyReference.cache

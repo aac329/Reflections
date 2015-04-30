@@ -1,9 +1,0 @@
-The problem is not with an active ticket because Andrew Alcantara (Prospect Id: 156308) also has an active ticket. 
-
-Maybe Vrushti has x > 30 point maximum? or because he is referred. one of the two.
-
-Referred does become an active check box when TC is selected. Inactive before?
-
-Ignored x > 30 possibility for now, moving to look into checkboxes.
-
-Found checkbox controls in connectsearchfilter.ascx.

@@ -1,3 +1,0 @@
-Program Drop Down List added to Projects edit Modal. Populated DDL with data from table. 
-Program Drop Down List added to Projects Create Modal. Hooked up, tested, and works.
-Editing Program on the Prospects page capability added. Tested and works.

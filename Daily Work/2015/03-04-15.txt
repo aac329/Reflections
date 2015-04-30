@@ -1,4 +1,0 @@
-Set up some javascript so that the modals have a 100% width for phones. Also, the edit TSCs modal was pushed together, so I edited some html 
-so that it appears beautifully on phones. I believed I have finished with the Manager view, however I'll double check it with Ryan tomorrow. 
-Added new Navbar to Requester view. Added new Navbar to TSC (Manage Tickets) view. Organized manage tickets sorting DDLs. Organized the tickets on 
-Manage Tickets, and got it looking really good. I need to move around a couple icons tomorrow but I should finish this task tomorrow.

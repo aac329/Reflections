@@ -1,1 +1,0 @@
-To delete campus from table: Foreach through previous campuses, check condition if it's in selected campuses, if not, delete campus from table. Cleaned up my front end code and added comments around my logic.

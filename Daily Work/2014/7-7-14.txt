@@ -1,1 +1,0 @@
-Started from scratch. Title and description now clickable which opens input boxes and save and cancel buttons. Working on wiring the buttons now. Got it so edit toggle mode only happens when you click exactly on the title or description

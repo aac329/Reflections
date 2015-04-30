@@ -1,1 +1,0 @@
-Removed hover from blank cells. Changed campus codes to campus descriptions for Index table. Wrote ajax and changed save method in controller for ajax. Messed around with test data in campuses to see how the table would look with many campuses per person. 

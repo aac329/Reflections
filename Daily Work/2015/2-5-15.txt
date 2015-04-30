@@ -1,2 +1,0 @@
-Tested and made it so Programs in the DB now appear in the DDL.
-Adding a New Program is now entirely functional and tested through the create DDL option.

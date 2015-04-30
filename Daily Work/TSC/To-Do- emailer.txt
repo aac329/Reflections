@@ -1,7 +1,0 @@
-Emails need to be sent to initial assignees upon creation.
-
-If anything changes on the ticket or if the campus is changed on the ticket, send an email to the TSC(s).
-
-If campus is changed, email new and old TSCs, since a new TSC might appear with a new campus.
-
-Email should include previous and new settings for each attribute changed AND the name of the user making the changes.

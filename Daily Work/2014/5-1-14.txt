@@ -1,4 +1,0 @@
-Finished installation of TortoiseSVN
-Finished installing Ektron
-Installed Beyond Compare
-Finished Installing IIS and setup

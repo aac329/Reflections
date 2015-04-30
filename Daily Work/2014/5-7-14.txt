@@ -1,7 +1,0 @@
-Applied AdminLayout to:
-
-dooraccess.aspx
-
-I also started working on a new design on the esemployee.aspx with Vivek.
-He showed me some really new advancements in web design, and I'm working on applying 
-a fully responsive web page.

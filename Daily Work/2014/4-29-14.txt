@@ -1,7 +1,0 @@
-Watched an a long video in the NAU EC Brand folder in the EC Training: EC Organizational Strategy Course.
-Went into the EC Training: Job Knowledge and skills. Watched a video about the EUM Voicemail System  underneath the Technology tab.
-I also watched a video  labeled "Unofficial Evaluation Training" in the same course previously mentioned.
-
-I completed steps 1-10 on the Computer Setup document found on sharepoint.
-Once I hit step 11, I had many problems trying to set the URLS of the repositories to the folders.
-Zartan kept timing out, after havign to wait 25-30 minutes during each try.
